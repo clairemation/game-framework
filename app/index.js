@@ -1,13 +1,16 @@
 var App = (() => {
   return {
-    $: require('./libraries/coolgebra.js'),
-    Engine: require('./engine.js'),
-    Entity: require('./entities/entities.js'),
-    EventEmitter: require('./events/event-emitter.js'),
-    ObjectPool: require('./libraries/object-pool.js'),
-    Physical: require('./engines/physical-engine.js'),
-    Shell: require('./shell.js'),
-    Stack: require('./libraries/stack.js'),
+    $: require('lib/coolgebra'),
+    Engines: require('engines'),
+    Entities: require('entities'),
+    EventEmitter: require('events'),
+    // File: require('lib/files'),
+    Lib: require('lib'),
+    ObjectPool: require('lib/object-pool'),
+    Position: require('engines/position'),
+    Shell: require('shell'),
+    Stack: require('lib/stack'),
+    // WebGLDataObject: require('lib/webgl/index')
   }
 })();
 

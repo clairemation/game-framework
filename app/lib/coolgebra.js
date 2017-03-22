@@ -1,61 +1,29 @@
-const Stack = require('./stack.js');
-const {sin, cos} = Math;
-const values = new Stack();
+const END_TAG = '$';
+
+const Stack = require('./stack'),
+  {sin, cos} = Math,
+  vectorInstance = new Vector(),
+  values = new Stack();
 var size = 0;
-var vectorInstance = null;
 
 function Vector(){};
 
 var $ = function(v){
   values.push(v);
   size = v.length;
-  return vectorInstance || new Vector();
+  return vectorInstance;
 };
 
-// Chain terminators, use any one ----
-
-Object.defineProperty(Vector.prototype, "$", {
+Object.defineProperty(Vector.prototype, END_TAG, {
   get: function(){
     return values.pop();
-  }
-});
-
-Object.defineProperty(Vector.prototype, "$$", {
-  get: function(){
-    return values.pop();
-  }
-});
-
-Object.defineProperty(Vector.prototype, "val", {
-  get: function(){
-    return values.pop();
-  }
-});
-
-Object.defineProperty(Vector.prototype, "eq", {
-  get: function(){
-    return values.pop();
-  }
-});
-
-Object.defineProperty(Vector.prototype, "end", {
-  get: function(){
-    return values.pop();
-  }
-});
-
-// Getters
-
-Object.defineProperty(Vector.prototype, "length", {
-  get: function(){
-    return $(values.peek()).vectorLength().$$;
   }
 });
 
 // Functions
 
 Vector.prototype.plus = function(x){
-  if (x.length > 1){
+  if (Array.isArray(x)){
     return this.plusVector(x);
   } else {
     return this.plusScalar(x);
@@ -251,34 +219,34 @@ Vector.prototype.dot = function(v){
 
 Vector.prototype.mix = function(v, t = 0.5){
   values.push(
-    this.timesScalar(1-t).plusVector($(v).timesScalar(t).$$).$$
+    this.timesScalar(1-t).plusVector($(v).timesScalar(t)[END_TAG])[END_TAG]
   );
   return this;
 }
 
 Vector.prototype.squaredLength = function() {
-  values.push(this.dot(values.peek()).$$);
+  values.push(this.dot(values.peek())[END_TAG]);
   return this;
 }
 
-Vector.prototype.vectorLength = function(){
-  values.push(Math.sqrt(this.squaredLength().$$));
+Vector.prototype.length = function(){
+  values.push(Math.sqrt(this.squaredLength()[END_TAG]));
   return this;
 }
 
 Vector.prototype.squaredDistance = function(v){
-  values.push(this.minusVector(v).squaredLength().$$);
+  values.push(this.minusVector(v).squaredLength()[END_TAG]);
   return this;
 }
 
 Vector.prototype.distance = function(v){
-  values.push(Math.sqrt(this.squaredDistance(v).$$));
+  values.push(Math.sqrt(this.squaredDistance(v)[END_TAG]));
   return this;
 }
 
 Vector.prototype.unit = function(){
   values.push(
-    this.divideByScalar($(values.peek()).vectorLength().$$).$$
+    this.divideByScalar($(values.peek()).length()[END_TAG])[END_TAG]
   );
   return this;
 }
@@ -320,12 +288,12 @@ Vector.prototype.angle2d = function(){
 Vector.prototype.directionTo = function(v){
   var u = values.pop();
   values.push(v);
-  values.push(this.minusVector(u).unit().$$);
+  values.push(this.minusVector(u).unit()[END_TAG]);
   return this;
 }
 
 Vector.prototype.projectedLength = function(v){
-  values.push(this.dot(v).$$);
+  values.push(this.dot(v)[END_TAG]);
   return this;
 }
 
@@ -347,13 +315,13 @@ Vector.prototype.scale = function(x,y,z){
     0, y, 0, 0,
     0, 0, z, 0,
     0, 0, 0, 1
-  ]).val);
+  ])[END_TAG]);
   return this;
 };
 
 Vector.prototype.rotate = function(x,y,z){
   if (size === 2){
-    values.push(this.rotate2d(x).$$);
+    values.push(this.rotate2d(x)[END_TAG]);
     return this;
   }
   var xRotation = [
@@ -375,11 +343,11 @@ Vector.prototype.rotate = function(x,y,z){
       0, 0, 0, 1
     ];
 
-  values.push(this.times(xRotation).times(yRotation).times(zRotation).val);
+  values.push(this.times(xRotation).times(yRotation).times(zRotation)[END_TAG]);
   return this;
 }
 
-Vector.prototype.matrixInverse = function(){
+Vector.prototype.inverse = function(){
   var r = Vector.IDENTITY_MATRIX,
     m = values.pop();
 

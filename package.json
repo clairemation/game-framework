@@ -2,7 +2,7 @@
   "name": "game",
   "version": "1.0.0",
   "description": "",
-  "main": ".eslintrc.js",
+  "main": "./app/index.js",
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.23.1",
@@ -18,8 +18,10 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
-    "start": "webpack-dev-server"
+    "lint-config": "eslint webpack.config.js",
+    "start": "webpack-dev-server",
+    "webpack": "webpack"
   },
-  "author": "",
+  "author": "clairemation",
   "license": "ISC"
 }

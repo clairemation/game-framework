@@ -1,3 +1,3 @@
-const Stack = require('../libraries/stack.js');
+const Stack = require('lib/stack');
 
 var executionModes = new Stack();

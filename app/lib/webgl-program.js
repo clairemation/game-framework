@@ -1,8 +1,10 @@
-function WebGLProgram(canvas, vertShaderUrl, fragShaderUrl){
+// function WebGLDataObject(canvas, vertShaderUrl, fragShaderUrl){
+function WebGLDataObject(args){
+  var {canvas, vertShaderUrl, fragShaderUrl} = args;
   this.canvas = canvas;
   this.gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
   var gl = this.gl;
-  this.projectionMatrix = WebGLProgram.makeOrthoMatrix(canvas.clientWidth, canvas.clientHeight, 1000);
+  this.projectionMatrix = WebGLDataObject.makeOrthoMatrix(canvas.clientWidth, canvas.clientHeight, 1000);
   this.mvMatrix = [
     1.0, 0.0, 0.0, 0.0,
     0.0, 1.0, 0.0, 0.0,
@@ -22,11 +24,11 @@ function WebGLProgram(canvas, vertShaderUrl, fragShaderUrl){
   }.bind(this));
 }
 
-WebGLProgram.prototype.use = function(){
+WebGLDataObject.prototype.use = function(){
   this.gl.useProgram(this.program.program);
 };
 
-WebGLProgram.prototype.bindDataToAttribute = function(attribute, data, numComponents){
+WebGLDataObject.prototype.bindDataToAttribute = function(attribute, data, numComponents){
   var buffer = this.gl.createBuffer();
   this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
   this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), this.gl.STATIC_DRAW);
@@ -35,7 +37,7 @@ WebGLProgram.prototype.bindDataToAttribute = function(attribute, data, numCompon
   this.gl.vertexAttribPointer(this.program.params.attributeLocations[attribute], numComponents, this.gl.FLOAT, false, 0, 0);
 };
 
-WebGLProgram.makeProjectionMatrix = function(fov, aspect, near, far, isInRadians){
+WebGLDataObject.makeProjectionMatrix = function(fov, aspect, near, far, isInRadians){
   if (!isInRadians) fov *= Math.PI / 180;
   var f = 1.0 / Math.tan(fov / 2);
   var rangeInverse = 1.0 / (near-far);
@@ -47,7 +49,7 @@ WebGLProgram.makeProjectionMatrix = function(fov, aspect, near, far, isInRadians
   ]);
 };
 
-WebGLProgram.makeOrthoMatrix = function(width, height, depth){
+WebGLDataObject.makeOrthoMatrix = function(width, height, depth){
   return new Float32Array([
     2/width, 0, 0, 0,
     0, -2/height, 0, 0,
@@ -56,7 +58,7 @@ WebGLProgram.makeOrthoMatrix = function(width, height, depth){
   ]);
 };
 
-WebGLProgram.prototype.setUniform = function(name, data){
+WebGLDataObject.prototype.setUniform = function(name, data){
   var setter = this.program.params.uniformSetters[name];
   var location = this.program.params.uniformLocations[name];
   if (setter === "uniform3f"){
@@ -69,22 +71,22 @@ WebGLProgram.prototype.setUniform = function(name, data){
   }
 };
 
-WebGLProgram.prototype.attachTexture = function(img){
+WebGLDataObject.prototype.attachTexture = function(img){
   if (typeof img === "string"){
     return new Promise(function(resolve, reject){
-      WebGLProgram.loadImage(img).then(function(result){
-        WebGLProgram.attachTexture(this.gl, result, 0, "LINEAR", "LINEAR_MIPMAP_NEAREST");
+      WebGLDataObject.loadImage(img).then(function(result){
+        WebGLDataObject.attachTexture(this.gl, result, 0, "LINEAR", "LINEAR_MIPMAP_NEAREST");
         resolve();
       })
     });
   }
   return new Promise(function(resolve, reject){
-    WebGLProgram.attachTexture(this.gl, img, 0, "LINEAR", "LINEAR_MIPMAP_NEAREST");
+    WebGLDataObject.attachTexture(this.gl, img, 0, "LINEAR", "LINEAR_MIPMAP_NEAREST");
     resolve();
   });
 };
 
-WebGLProgram.attachTexture = function(gl, texImage, index, magFilter, minFilter){
+WebGLDataObject.attachTexture = function(gl, texImage, index, magFilter, minFilter){
   index = index || 0;
   magFilter = magFilter || "LINEAR";
   minFilter = minFilter || "LINEAR_MIPMAP_NEAREST";
@@ -99,7 +101,7 @@ WebGLProgram.attachTexture = function(gl, texImage, index, magFilter, minFilter)
   gl.activeTexture(gl.TEXTURE0);
 };
 
-WebGLProgram.loadImage = function(url){
+WebGLDataObject.loadImage = function(url){
   return new Promise(function(resolve, reject){
     var img = new Image();
     img.onload = function(){

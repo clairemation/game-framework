@@ -1,4 +1,4 @@
-var Stack = require('./stack.js');
+const Stack = require('./stack');
 
 var ObjectPool = Stack;
 

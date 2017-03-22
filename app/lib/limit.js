@@ -8,3 +8,5 @@ function threshold(x, threshold, min, max){
   if (x < threshold) return min;
   return max;
 }
+
+module.exports = {clamp, threshold};

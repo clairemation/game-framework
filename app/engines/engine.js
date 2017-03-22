@@ -1,4 +1,4 @@
-function Engine() {
+var Engine = function Engine() {
   const index = [],
   registry = {
     indices: {},
@@ -32,7 +32,7 @@ function Engine() {
     index[myIndex] = undefined;
   }
 
-  return new Engine();
-}
+  return Engine;
+}();
 
 module.exports = Engine;

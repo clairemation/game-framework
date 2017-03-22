@@ -1,4 +1,5 @@
-var Entity = require('./entities.js');
+const Entity = require('./entity'),
+  positionEngine = require('engines/position');
 
 function Character(){
   Entity.call(this, arguments);

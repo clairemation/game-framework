@@ -1,1 +1,1 @@
-module.exports = require('./event-emitter.js');
+module.exports = require('./event-emitter');

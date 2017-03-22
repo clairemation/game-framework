@@ -18,5 +18,12 @@ module.exports = {
         ]
       }
     ]
+  },
+  resolve: {
+    modules: [
+      path.resolve(__dirname, 'app/'),
+      'node_modules'
+    ],
+    extensions: ['.js'],
   }
 };

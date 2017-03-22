@@ -1,4 +1,4 @@
-const Stack = require('./stack.js');
+const Stack = require('./stack');
 const {sin, cos} = Math;
 const values = new Stack();
 var size = 0;
