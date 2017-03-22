@@ -4,7 +4,6 @@ var App = (() => {
     Engines: require('engines'),
     Entities: require('entities'),
     EventEmitter: require('events'),
-    // File: require('lib/files'),
     Lib: require('lib'),
     ObjectPool: require('lib/object-pool'),
     Position: require('engines/position'),

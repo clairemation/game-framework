@@ -1,5 +1,17 @@
-// messages sent by engines
-// each component has a stack of states
+// events are published only by engines, subscribed to only by script (action) components
+
+// only message engine can send a targeted message to any component or entity
+
+// entity contains only a stack of states
+// entity's only action is to change its state
+// states are generic - entities can share a state (e.g. hurt), passing in context if nec.
+// states contain only components
+// components are generic - entities can share a component, passing in context if nec.
+// components can be common between different states, many will be
+
+// no component can act directly on another
+
+
 
 // register subscription on hero:
 
